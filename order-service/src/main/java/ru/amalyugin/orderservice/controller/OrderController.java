@@ -26,8 +26,11 @@ public class OrderController {
                         .build()
         );
         return ResponseEntity.ok(workflow.createOrder(new OrderToCreateDto(
+                "USERNAME",
                 System.currentTimeMillis(),
-                "Some Description"
+                "Some Description",
+                143542L,
+                121L
         )));
     }
 

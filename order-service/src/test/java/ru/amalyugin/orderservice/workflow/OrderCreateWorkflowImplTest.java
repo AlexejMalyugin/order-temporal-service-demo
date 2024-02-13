@@ -13,9 +13,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ru.amalyugin.orderservice.activity.AuditActivity;
-import ru.amalyugin.orderservice.activity.OrderDaoActivity;
-import ru.amalyugin.orderservice.activity.UtilActivity;
+import ru.amalyugin.orderservice.activity.*;
 import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 import ru.amalyugin.orderservice.workflow.impl.OrderCreateWorkflowImpl;
 
@@ -33,6 +31,12 @@ class OrderCreateWorkflowImplTest {
     @Mock(withoutAnnotations = true)
     private UtilActivity utilActivity;
 
+    @Mock(withoutAnnotations = true)
+    private ExternalSystemActivities externalSystemActivities;
+
+    @Mock(withoutAnnotations = true)
+    private NotificationActivities notificationActivities;
+
     @RegisterExtension
     public static final TestWorkflowExtension workflowExtension = TestWorkflowExtension.newBuilder()
             .setWorkflowTypes(OrderCreateWorkflowImpl.class)
@@ -45,11 +49,24 @@ class OrderCreateWorkflowImplTest {
             Worker worker,
             OrderCreateWorkflow workflow
     ) {
-        OrderToCreateDto dto = new OrderToCreateDto(System.currentTimeMillis(), "DESC");
+        OrderToCreateDto dto = new OrderToCreateDto(
+                "USERNAME",
+                System.currentTimeMillis(),
+                "DESC",
+                143535L,
+                121L
+        );
         when(orderDaoActivity.saveOrder(any())).thenReturn(1);
         when(utilActivity.generateUUID()).thenReturn(UUID.randomUUID().toString());
+        when(externalSystemActivities.getExternalInfo(any(), any())).thenReturn(UUID.randomUUID().toString());
 
-        worker.registerActivitiesImplementations(orderDaoActivity, auditActivity, utilActivity);
+        worker.registerActivitiesImplementations(
+                orderDaoActivity,
+                auditActivity,
+                utilActivity,
+                externalSystemActivities,
+                notificationActivities
+        );
 
         environment.start();
 
