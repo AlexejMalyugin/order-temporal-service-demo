@@ -1,6 +1,6 @@
 package ru.amalyugin.orderservice.dto;
 
-public record OrderToCreateDto (
+public record OrderToCreateDto(
         Long requestId,
         String description
 ) {

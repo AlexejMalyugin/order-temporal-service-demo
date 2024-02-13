@@ -26,6 +26,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.temporal:temporal-testing:1.22.3'
     implementation 'io.temporal:temporal-sdk:1.22.3'
     implementation "io.temporal:temporal-spring-boot-starter-alpha:1.22.3"
 }
