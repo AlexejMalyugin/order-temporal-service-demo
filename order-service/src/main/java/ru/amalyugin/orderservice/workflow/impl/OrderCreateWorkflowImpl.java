@@ -16,7 +16,7 @@ import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 import ru.amalyugin.orderservice.workflow.OrderCreateWorkflow;
 
 @Slf4j
-@WorkflowImpl(taskQueues = "OrderCreateQueue")
+@WorkflowImpl(taskQueues = "order-create-queue")
 public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
 
     private final AuditActivity auditActivity = Workflow.newActivityStub(

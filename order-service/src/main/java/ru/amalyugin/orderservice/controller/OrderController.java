@@ -21,7 +21,7 @@ public class OrderController {
         OrderCreateWorkflow workflow = client.newWorkflowStub(
                 OrderCreateWorkflow.class,
                 WorkflowOptions.newBuilder()
-                        .setTaskQueue("OrderCreateQueue")
+                        .setTaskQueue("order-create-queue")
                         .setWorkflowId("OrderCreate")
                         .build()
         );

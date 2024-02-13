@@ -12,7 +12,7 @@ import ru.amalyugin.orderservice.activity.ExternalSystemActivities;
 
 @Slf4j
 @Component
-@ActivityImpl(taskQueues = "OrderCreateQueue")
+@ActivityImpl(taskQueues = "order-create-queue")
 public class ExternalSystemActivitiesImpl implements ExternalSystemActivities {
 
     @Override

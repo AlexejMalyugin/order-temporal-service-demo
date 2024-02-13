@@ -9,7 +9,7 @@ import ru.amalyugin.orderservice.dto.AuditRecordDto;
 
 @Slf4j
 @Component
-@ActivityImpl(taskQueues = "OrderCreateQueue")
+@ActivityImpl(taskQueues = "order-create-queue")
 public class AuditActivityImpl implements AuditActivity {
 
     @Override

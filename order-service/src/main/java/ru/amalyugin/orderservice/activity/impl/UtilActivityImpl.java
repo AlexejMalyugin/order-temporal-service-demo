@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.amalyugin.orderservice.activity.UtilActivity;
 
 @Component
-@ActivityImpl(taskQueues = "OrderCreateQueue")
+@ActivityImpl(taskQueues = "order-create-queue")
 public class UtilActivityImpl implements UtilActivity {
 
     @Override

@@ -9,7 +9,7 @@ import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 
 @Slf4j
 @Component
-@ActivityImpl(taskQueues = "OrderCreateQueue")
+@ActivityImpl(taskQueues = "order-create-queue")
 public class OrderDaoActivityImpl implements OrderDaoActivity {
 
     @Override

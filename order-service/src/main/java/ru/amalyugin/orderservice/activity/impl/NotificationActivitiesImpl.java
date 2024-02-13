@@ -11,7 +11,7 @@ import ru.amalyugin.orderservice.activity.NotificationActivities;
 
 @Slf4j
 @Component
-@ActivityImpl(taskQueues = "OrderCreateQueue")
+@ActivityImpl(taskQueues = "order-create-queue")
 public class NotificationActivitiesImpl implements NotificationActivities {
 
     @Override

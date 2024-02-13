@@ -8,7 +8,7 @@ import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 @WorkflowInterface
 public interface OrderCreateWorkflow {
 
-    @WorkflowMethod
+    @WorkflowMethod(name = "create-order-workflow")
     String createOrder(OrderToCreateDto dto);
 
 }
