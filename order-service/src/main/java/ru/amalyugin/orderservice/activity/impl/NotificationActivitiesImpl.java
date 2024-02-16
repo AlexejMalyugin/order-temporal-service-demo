@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 
 import ru.amalyugin.orderservice.activity.NotificationActivities;
 
+import static ru.amalyugin.orderservice.constants.TemporalConst.CREATE_ORDER_QUEUE_NAME;
+
 @Slf4j
 @Component
-@ActivityImpl(taskQueues = "order-create-queue")
+@ActivityImpl(taskQueues = CREATE_ORDER_QUEUE_NAME)
 public class NotificationActivitiesImpl implements NotificationActivities {
 
     @Override

@@ -20,9 +20,10 @@ import ru.amalyugin.orderservice.workflow.OrderCreateWorkflow;
 
 import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalSource.ORG;
 import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalSource.VENDOR;
+import static ru.amalyugin.orderservice.constants.TemporalConst.CREATE_ORDER_QUEUE_NAME;
 
 @Slf4j
-@WorkflowImpl(taskQueues = "order-create-queue")
+@WorkflowImpl(taskQueues = CREATE_ORDER_QUEUE_NAME)
 public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
 
     private final AuditActivity auditActivity = Workflow.newActivityStub(

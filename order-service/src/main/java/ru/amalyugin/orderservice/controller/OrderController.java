@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 import ru.amalyugin.orderservice.workflow.OrderCreateWorkflow;
 
+import static ru.amalyugin.orderservice.constants.TemporalConst.CREATE_ORDER_QUEUE_NAME;
+import static ru.amalyugin.orderservice.constants.TemporalConst.CREATE_ORDER_WF_ID;
+
 @RestController
 @RequiredArgsConstructor
 public class OrderController {
@@ -21,8 +24,8 @@ public class OrderController {
         OrderCreateWorkflow workflow = client.newWorkflowStub(
                 OrderCreateWorkflow.class,
                 WorkflowOptions.newBuilder()
-                        .setTaskQueue("order-create-queue")
-                        .setWorkflowId("OrderCreate")
+                        .setTaskQueue(CREATE_ORDER_QUEUE_NAME)
+                        .setWorkflowId(CREATE_ORDER_WF_ID)
                         .build()
         );
         return ResponseEntity.ok(workflow.createOrder(new OrderToCreateDto(
