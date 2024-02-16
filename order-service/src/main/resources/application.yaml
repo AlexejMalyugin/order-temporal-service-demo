@@ -1,6 +1,10 @@
 server:
   port: 8095
 
+logging:
+  level:
+    root: debug
+
 spring:
   application:
     name: order-service-app

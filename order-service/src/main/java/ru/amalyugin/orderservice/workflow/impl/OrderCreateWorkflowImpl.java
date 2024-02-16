@@ -9,7 +9,7 @@ import io.temporal.workflow.Async;
 import io.temporal.workflow.Promise;
 import io.temporal.workflow.Workflow;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import ru.amalyugin.orderservice.activity.*;
 import ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalInfoDto;
 import ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalInfoOutputDto;
@@ -22,9 +22,10 @@ import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.Extern
 import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalSource.VENDOR;
 import static ru.amalyugin.orderservice.constants.TemporalConst.CREATE_ORDER_QUEUE_NAME;
 
-@Slf4j
 @WorkflowImpl(taskQueues = CREATE_ORDER_QUEUE_NAME)
 public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
+
+    public static final Logger logger = Workflow.getLogger(OrderCreateWorkflowImpl.class);
 
     private final AuditActivity auditActivity = Workflow.newActivityStub(
             AuditActivity.class,
@@ -69,12 +70,15 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
 
     @Override
     public String createOrder(OrderToCreateDto dto) {
+        logger.debug("Workflow started");
         String uuid = utilActivity.generateUUID();
 
+        logger.debug("Send notification process starter");
         // TRY SEND NOTIFICATION ASYNC
         Promise<Void> notificationPromise = Async.procedure(() ->
                 notificationActivities.sendNotification(new NotificationRequestDto(dto.username())));
 
+        logger.debug("Get external data processes started");
         // TRY TO DOWNLOAD EXTERNAL SERVICE INFO
         Promise<ExternalInfoOutputDto> vendorPromise = Async.function(
                 externalSystemActivities::getExternalInfo,
@@ -88,7 +92,7 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
         String vendorName = vendorPromise.get().input();
         String orgName = orgPromise.get().input();
 
-        log.info("External Services answer: {}, {}", vendorName, orgName);
+        logger.debug("External Services answer: {}, {}", vendorName, orgName);
 
         try {
             orderDaoActivity.saveOrder(dto);
@@ -107,6 +111,8 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
                 dto.requestId(),
                 AuditRecordDto.AuditStatus.SUCCESS
         ));
+
+        logger.debug("Workflow process finished");
 
         return dto.description();
     }
