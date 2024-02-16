@@ -7,7 +7,13 @@ import io.temporal.activity.ActivityMethod;
 public interface ExternalSystemActivities {
 
     @ActivityMethod
-    String getExternalInfo(ExternalSource source, Long id);
+    String getExternalInfo(ExternalInfoDto input);
+
+    record ExternalInfoDto(
+            ExternalSource source,
+            Long id
+    ) {
+    }
 
     enum ExternalSource {
         VENDOR,

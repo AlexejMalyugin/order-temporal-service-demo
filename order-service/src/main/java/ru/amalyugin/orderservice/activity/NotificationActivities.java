@@ -7,6 +7,9 @@ import io.temporal.activity.ActivityMethod;
 public interface NotificationActivities {
 
     @ActivityMethod
-    void sendNotification(String username);
+    void sendNotification(NotificationRequestDto input);
+
+    record NotificationRequestDto(String username) {
+    }
 
 }

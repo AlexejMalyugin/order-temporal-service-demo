@@ -11,9 +11,14 @@ import io.temporal.workflow.Workflow;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.amalyugin.orderservice.activity.*;
+import ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalInfoDto;
+import ru.amalyugin.orderservice.activity.NotificationActivities.NotificationRequestDto;
 import ru.amalyugin.orderservice.dto.AuditRecordDto;
 import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 import ru.amalyugin.orderservice.workflow.OrderCreateWorkflow;
+
+import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalSource.ORG;
+import static ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalSource.VENDOR;
 
 @Slf4j
 @WorkflowImpl(taskQueues = "order-create-queue")
@@ -46,6 +51,7 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
                     .setRetryOptions(
                             RetryOptions.newBuilder()
                                     .setInitialInterval(Duration.ofSeconds(1))
+                                    .setBackoffCoefficient(1.5)
                                     .setMaximumInterval(Duration.ofSeconds(10))
                                     .setMaximumAttempts(5)
                                     .build())
@@ -65,18 +71,16 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
 
         // TRY SEND NOTIFICATION ASYNC
         Promise<Void> notificationPromise = Async.procedure(() ->
-                notificationActivities.sendNotification(dto.username()));
+                notificationActivities.sendNotification(new NotificationRequestDto(dto.username())));
 
         // TRY TO DOWNLOAD EXTERNAL SERVICE INFO
         Promise<String> vendorPromise = Async.function(
                 externalSystemActivities::getExternalInfo,
-                ExternalSystemActivities.ExternalSource.VENDOR,
-                dto.vendorId()
+                new ExternalInfoDto(VENDOR, dto.vendorId())
         );
         Promise<String> orgPromise = Async.function(
                 externalSystemActivities::getExternalInfo,
-                ExternalSystemActivities.ExternalSource.ORG,
-                dto.orgId()
+                new ExternalInfoDto(ORG, dto.orgId())
         );
 
         String vendorName = vendorPromise.get();

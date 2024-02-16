@@ -16,15 +16,15 @@ import ru.amalyugin.orderservice.activity.ExternalSystemActivities;
 public class ExternalSystemActivitiesImpl implements ExternalSystemActivities {
 
     @Override
-    public String getExternalInfo(ExternalSource source, Long id) {
-        log.info("External call started: {}", source.name());
+    public String getExternalInfo(ExternalInfoDto input) {
+        log.info("External call started: {}", input.source().name());
         try {
             ThreadLocalRandom random = ThreadLocalRandom.current();
             int sec = random.nextInt(2, 8);
             Thread.sleep(Duration.ofSeconds(sec));
-            log.info("External service {} response time: {}", source.name(), sec);
+            log.info("External service {} response time: {}", input.source().name(), sec);
         } catch (Exception exception) {
-            log.error("Exception when wait external service {}: ", source.name(), exception);
+            log.error("Exception when wait external service {}: ", input.source().name(), exception);
         }
         return UUID.randomUUID().toString();
     }

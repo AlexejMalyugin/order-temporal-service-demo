@@ -15,8 +15,8 @@ import ru.amalyugin.orderservice.activity.NotificationActivities;
 public class NotificationActivitiesImpl implements NotificationActivities {
 
     @Override
-    public void sendNotification(String username) {
-        log.info("Notification for user {} started", username);
+    public void sendNotification(NotificationRequestDto input) {
+        log.info("Notification for user {} started", input.username());
 
         try {
             int sec = ThreadLocalRandom.current().nextInt(15, 25);
@@ -29,7 +29,7 @@ public class NotificationActivitiesImpl implements NotificationActivities {
         if (random == 0) {
             throw new RuntimeException("Notification has not been delivered");
         } else {
-            log.info("Notification for user {} successfully sent", username);
+            log.info("Notification for user {} successfully sent", input.username());
         }
     }
 
