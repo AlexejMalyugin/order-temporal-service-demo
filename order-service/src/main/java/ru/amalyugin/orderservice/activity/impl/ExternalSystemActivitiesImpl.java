@@ -16,7 +16,7 @@ import ru.amalyugin.orderservice.activity.ExternalSystemActivities;
 public class ExternalSystemActivitiesImpl implements ExternalSystemActivities {
 
     @Override
-    public String getExternalInfo(ExternalInfoDto input) {
+    public ExternalInfoOutputDto getExternalInfo(ExternalInfoDto input) {
         log.info("External call started: {}", input.source().name());
         try {
             ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -26,7 +26,7 @@ public class ExternalSystemActivitiesImpl implements ExternalSystemActivities {
         } catch (Exception exception) {
             log.error("Exception when wait external service {}: ", input.source().name(), exception);
         }
-        return UUID.randomUUID().toString();
+        return new ExternalInfoOutputDto(UUID.randomUUID().toString());
     }
 
 

@@ -9,6 +9,9 @@ import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 public interface OrderDaoActivity {
 
     @ActivityMethod
-    int saveOrder(OrderToCreateDto dto);
+    SaveOrderInputDto saveOrder(OrderToCreateDto dto);
+
+    record SaveOrderInputDto(int count) {
+    }
 
 }

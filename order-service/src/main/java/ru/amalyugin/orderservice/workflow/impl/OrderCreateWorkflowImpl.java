@@ -12,6 +12,7 @@ import io.temporal.workflow.Workflow;
 import lombok.extern.slf4j.Slf4j;
 import ru.amalyugin.orderservice.activity.*;
 import ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalInfoDto;
+import ru.amalyugin.orderservice.activity.ExternalSystemActivities.ExternalInfoOutputDto;
 import ru.amalyugin.orderservice.activity.NotificationActivities.NotificationRequestDto;
 import ru.amalyugin.orderservice.dto.AuditRecordDto;
 import ru.amalyugin.orderservice.dto.OrderToCreateDto;
@@ -74,17 +75,17 @@ public class OrderCreateWorkflowImpl implements OrderCreateWorkflow {
                 notificationActivities.sendNotification(new NotificationRequestDto(dto.username())));
 
         // TRY TO DOWNLOAD EXTERNAL SERVICE INFO
-        Promise<String> vendorPromise = Async.function(
+        Promise<ExternalInfoOutputDto> vendorPromise = Async.function(
                 externalSystemActivities::getExternalInfo,
                 new ExternalInfoDto(VENDOR, dto.vendorId())
         );
-        Promise<String> orgPromise = Async.function(
+        Promise<ExternalInfoOutputDto> orgPromise = Async.function(
                 externalSystemActivities::getExternalInfo,
                 new ExternalInfoDto(ORG, dto.orgId())
         );
 
-        String vendorName = vendorPromise.get();
-        String orgName = orgPromise.get();
+        String vendorName = vendorPromise.get().input();
+        String orgName = orgPromise.get().input();
 
         log.info("External Services answer: {}, {}", vendorName, orgName);
 

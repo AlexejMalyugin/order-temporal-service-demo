@@ -56,9 +56,10 @@ class OrderCreateWorkflowImplTest {
                 143535L,
                 121L
         );
-        when(orderDaoActivity.saveOrder(any())).thenReturn(1);
+        when(orderDaoActivity.saveOrder(any())).thenReturn(new OrderDaoActivity.SaveOrderInputDto(1));
         when(utilActivity.generateUUID()).thenReturn(UUID.randomUUID().toString());
-        when(externalSystemActivities.getExternalInfo(any())).thenReturn(UUID.randomUUID().toString());
+        when(externalSystemActivities.getExternalInfo(any()))
+                .thenReturn(new ExternalSystemActivities.ExternalInfoOutputDto(UUID.randomUUID().toString()));
 
         worker.registerActivitiesImplementations(
                 orderDaoActivity,

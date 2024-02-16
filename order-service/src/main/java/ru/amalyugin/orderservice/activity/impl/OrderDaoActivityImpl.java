@@ -13,12 +13,12 @@ import ru.amalyugin.orderservice.dto.OrderToCreateDto;
 public class OrderDaoActivityImpl implements OrderDaoActivity {
 
     @Override
-    public int saveOrder(OrderToCreateDto dto) {
+    public SaveOrderInputDto saveOrder(OrderToCreateDto dto) {
         log.info("Order saved: {}", dto);
         if (System.currentTimeMillis() % 2 == 0) {
             throw new RuntimeException("Save failed: " + dto);
         } else {
-            return 1;
+            return new SaveOrderInputDto(1);
         }
     }
 
